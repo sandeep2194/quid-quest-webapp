@@ -1,4 +1,4 @@
-import StandardButtonGreen from "@/lib/Buttons/StandardButtonGreen";
+import StandardButtonGreen from "@/app/lib/Buttons/StandardButtonGreen"
 
 export default function Login() {
     return (
