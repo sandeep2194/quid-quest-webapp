@@ -15,7 +15,7 @@ export default function Welcome() {
             <ul className="list-disc pl-5 space-y-2 text-gray-600">
                 <li>Ensure you have your phone nearby for OTP verification.</li>
                 <li>Keep your bank details ready for seamless integration.</li>
-                <li>Have a professional profile photo to personalize your experience.</li>
+                {/* <li>Have a professional profile photo to personalize your experience.</li> */}
             </ul>
 
             <div className="mt-6">

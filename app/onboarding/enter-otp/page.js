@@ -1,7 +1,7 @@
 "use client"
 
 import StandardButtonGreen from "@/app/lib/Buttons/StandardButtonGreen";
-import StandardHalfButtonPurple from "@/app/lib/Buttons/StandardHalfButtonPurple";
+import CustomButton from "@/app/lib/Buttons/CustomButton";
 import EmptyFieldError from "@/app/lib/Errors/EmptyFieldError";
 import StandardInputWIthLabel from "@/app/lib/Input/StandardInputWIthLabel";
 import { useState } from "react"
@@ -32,10 +32,13 @@ export default function EnterOtp() {
 
 
             <div className="h-2" />
-            <div className="flex flex-row justify-items-stretch">
-                <StandardHalfButtonPurple
+            <div className="flex flex-row w-full space-x-5">
+                <CustomButton
                     btnText={"Resend otp"}
-                    href={"enter-otp"} />
+                    href={"enter-otp"}
+                    color={"[#972DC9]"}
+                    hoverColor={"purple-600"}
+                />
 
                 <StandardButtonGreen
                     btnText={"Verify"}
