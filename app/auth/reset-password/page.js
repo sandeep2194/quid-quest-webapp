@@ -14,7 +14,8 @@ export default function ResetPassword() {
   const supabase = createClientComponentClient();
   const [success, setSuccess] = useState(false);
 
-  const handleReset = async () => {
+  const handleReset = async (e) => {
+    e.preventDefault();
     if (!password) {
       setError(true);
       return;
@@ -69,7 +70,7 @@ export default function ResetPassword() {
       />
 
       <div className="h-2" />
-      <StandardButtonGreen btnText={"Submit"} href={"login"} />
+      <StandardButtonGreen btnText={"Submit"} onClick={handleReset} />
     </div>
   );
 }
