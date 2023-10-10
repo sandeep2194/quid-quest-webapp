@@ -5,7 +5,8 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useAuthContext } from "@/app/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
+import { AuthContextProvider } from '@/app/context/AuthContext'
 import {
     Bars3Icon,
     CalendarIcon,
@@ -41,7 +42,7 @@ export default function DashboardLayout({ children }) {
     }, [user])
  
     return (
-        <>
+        <AuthContextProvider>
             <div>
                 <Transition.Root show={sidebarOpen} as={Fragment}>
                     <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
@@ -196,6 +197,6 @@ export default function DashboardLayout({ children }) {
                     <div className="px-4 sm:px-6 lg:px-8">{children}</div>
                 </main>
             </div>
-        </>
+        </AuthContextProvider>
     )
 }
