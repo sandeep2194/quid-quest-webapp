@@ -9,7 +9,7 @@ export async function POST(req) {
     const json = await req.json();
     const { firstName, email, link } = json;
     const data = await resend.emails.send({
-      from: "Quid Quest <onboarding@resend.dev>",
+      from: "Quid Quest <onboarding@quid.quest>",
       to: [email],
       subject: "Onboading Invite",
       react: EmailTemplate({ firstName, link }),
