@@ -159,7 +159,7 @@ export default function FinalVerification() {
 
       <div className="h-2" />
 
-      <StandardButtonGreen btnText={"next"} href="" />
+      <StandardButtonGreen btnText={"next"} href="create-password" />
     </div>
   );
 }
