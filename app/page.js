@@ -1,6 +1,10 @@
+import StandardButtonGreen from "./lib/Buttons/StandardButtonGreen";
 
 export default function Home() {
   return (
-    <h1>home</h1>
+    <StandardButtonGreen>
+      href= "/auth/login"
+      btnText = Login
+    </StandardButtonGreen>
   )
 }
