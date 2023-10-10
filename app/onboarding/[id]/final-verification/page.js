@@ -111,7 +111,7 @@ export default function FinalVerification() {
 
             <StandardButtonGreen
                 btnText={"next"}
-                href={"final-verification"}
+                href={"create-password"}
             />
 
         </div>
