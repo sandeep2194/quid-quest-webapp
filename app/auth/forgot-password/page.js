@@ -1,3 +1,4 @@
+// /auth/forgot-password/page.js
 "use client";
 import { useState } from "react";
 import StandardInputWIthLabel from "@/app/lib/Input/StandardInputWIthLabel";

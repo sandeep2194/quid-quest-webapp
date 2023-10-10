@@ -1,3 +1,4 @@
+// /reset-password//page.js
 "use client"
 import StandardInputWIthLabel from "@/app/lib/Input/StandardInputWIthLabel";
 import StandardButtonGreen from "@/app/lib/Buttons/StandardButtonGreen";

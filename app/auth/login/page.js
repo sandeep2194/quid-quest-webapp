@@ -1,3 +1,4 @@
+// /auth//page.js
 "use client";
 import StandardInputWIthLabel from "@/app/lib/Input/StandardInputWIthLabel";
 import { useState } from "react";
