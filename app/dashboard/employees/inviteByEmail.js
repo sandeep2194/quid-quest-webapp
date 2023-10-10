@@ -6,7 +6,7 @@ import StandardInputWIthLabel from "@/app/lib/Input/StandardInputWIthLabel";
 import InputFieldModal from "@/app/lib/Modals/InputFieldModal";
 import { useState } from "react";
 
-export default function InviteByEmail({showModal, setShowModal}) {
+export default function InviteByEmail({ showModal, setShowModal }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,6 +15,51 @@ export default function InviteByEmail({showModal, setShowModal}) {
   const [lnError, setLnError] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Validate your input fields here, for example:
+    if (!firstName) {
+      setFnError(true);
+      return;
+    }
+    if (!lastName) {
+      setLnError(true);
+      return;
+    }
+    if (!email) {
+      setEmailError(true);
+      return;
+    }
+
+    // If all fields are valid, make the API call
+    try {
+      console.log(email);
+      const response = await fetch("/api/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: firstName,
+          email: email,
+          link: "http://localhost:3000",
+        }),
+      });
+
+      const data = await response.json();
+      if (data.error) {
+        // Handle error
+        console.error(data.error);
+      } else {
+        // Handle success
+        console.log(data);
+        // Maybe reset the form or provide feedback to the user
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+  };
 
   return (
     <InputFieldModal open={showModal} setOpen={setShowModal}>
@@ -77,7 +122,7 @@ export default function InviteByEmail({showModal, setShowModal}) {
         <div className="h-2" />
         <StandardButtonGreen
           btnText={"send invitation"}
-          href={"phone-number"}
+          onClick={handleSubmit}
         />
       </div>
     </InputFieldModal>
