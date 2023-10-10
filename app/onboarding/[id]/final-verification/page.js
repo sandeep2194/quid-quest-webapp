@@ -79,64 +79,7 @@ export default function FinalVerification() {
           onChange={(e) => setLastName(e.target.value)}
           value={lastName}
         />
-
-<<<<<<< HEAD
-            <div>
-                <StandardInputWIthLabel
-                    id={"accountNumber"}
-                    label={"Account Number"}
-                    name={"accountNumber"}
-                    type={"number"}
-                    onChange={e => setAccountNumber(e.target.value)
-                    } />
-                {
-                    anError ? <EmptyFieldError errorMessage={"Enter your Account Number"} /> : <></>
-                }
-            </div>
-
-            <div>
-                <StandardInputWIthLabel
-                    id={"transitNumber"}
-                    label={"Transit Number"}
-                    name={"transitNumber"}
-                    type={"number"}
-                    onChange={e => setTransitNumber(e.target.value)
-                    } />
-
-                {
-                    tnError ? <EmptyFieldError errorMessage={"Enter your Transit Number"} /> : <></>
-                }
-            </div>
-
-            <div>
-                <StandardInputWIthLabel
-                    id={"instituteNumber"}
-                    label={"Institute Number"}
-                    name={"instituteNumber"}
-                    type={"number"}
-                    onChange={e => setInstituteNumber(e.target.value)
-                    } />
-
-                {
-                    inError ? <EmptyFieldError errorMessage={"Enter your Institute Number"} /> : <></>
-                }
-            </div>
-
-            <div className="h-2" />
-
-            <StandardButtonGreen
-                btnText={"next"}
-                href={"create-password"}
-            />
-=======
-        {lnError ? (
-          <EmptyFieldError errorMessage={"Enter your last Name"} />
-        ) : (
-          <></>
-        )}
       </div>
->>>>>>> main
-
       {/* <div>
         <div className="flex flex-row justify-between">
           <label className="block text-lg leading-6 text-gray-900 font-semibold">
