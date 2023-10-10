@@ -5,7 +5,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useAuthContext } from "@/app/context/AuthContext";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { AuthContextProvider } from '@/app/context/AuthContext'
 import {
     Bars3Icon,
