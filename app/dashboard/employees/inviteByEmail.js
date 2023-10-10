@@ -41,7 +41,7 @@ export default function InviteByEmail({ showModal, setShowModal }) {
     // If all fields are valid, make the API calls
     const onboardingId = await createOnBoarding();
     if (!onboardingId) return;
-    const link = `https://www.quid.quest/onboarding/${onboardingId}`;
+    const link = `https://www.quid.quest/onboarding/${onboardingId}/welcome`;
     await sendInviteEmail(link);
   };
   const sendInviteEmail = async (link) => {
