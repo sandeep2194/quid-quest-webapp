@@ -18,10 +18,12 @@ export default function ResetPassword() {
     e.preventDefault();
     if (!password) {
       setError(true);
+      setTimeout(() => setError(false), 5000);
       return;
     }
     if (password != confirmPassword) {
       setError(true);
+      setTimeout(() => setError(false), 5000);
       return;
     }
     const res = await supabase.auth.updateUser({ password: confirmPassword });

@@ -9,17 +9,21 @@ import { useRouter } from "next/navigation";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
   const supabase = createClientComponentClient();
   const handleSignIn = async () => {
+    if (!email || !password) {
+      setError("Please enter email and password");
+      return;
+    }
     const res = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (res.error) {
       console.log("error while logig: ", JSON.stringify(res.error));
-      setError(true);
+      setError("Your crendtials do not match");
     } else {
       router.push("/dashboard");
     }
@@ -32,7 +36,7 @@ export default function Login() {
 
       {error ? (
         <p className="mt-1 font-semibold leading-6 text-center text-lg text-red-500">
-          Your credentials does not match !
+          {error}
         </p>
       ) : (
         <></>

@@ -90,17 +90,24 @@ export default function InviteByEmail({ showModal, setShowModal }) {
       console.log("error creating onbaording", res.error);
     } else {
       console.log("res", res.data);
-      return res.data[0].id
+      return res.data[0].id;
     }
   };
 
   return (
     <InputFieldModal open={showModal} setOpen={setShowModal}>
       {sent ? (
-        <>
-          <div>{"Email Sent Thanks"}</div>
-          <button onClick={() => setShowModal(false)}>Close</button>
-        </>
+        <div className="p-8 bg-white w-auto flex flex-col space-y-6 justify-center items-center">
+          <p className="text-lg text-center font-semibold text-black">
+            {"Email Sent to the employee."}
+          </p>
+          <button
+            className="w-min px-6 py-2 bg-green-700 text-bold text-white rounded-md"
+            onClick={() => setShowModal(false)}
+          >
+            Close
+          </button>
+        </div>
       ) : (
         <div className="flex flex-col justify-centers space-y-6 px-6 py-10 rounded-xl shadow-xl w-full h-full">
           <h1 className="text-center text-2xl font-bold text-gray-800 mb-4">

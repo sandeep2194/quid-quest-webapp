@@ -39,10 +39,10 @@ export default function Employees() {
               <DropdownBoxFunction></DropdownBoxFunction>
             </div>
             <button
-              className="hidden bg-[#2BB529] rounded-md text-white w-auto md:flex flex-row font-semibold text-xl p-2"
+              className="hidden bg-[#2BB529] rounded-md text-white md:block font-semibold text-xl h-min px-4 py-2"
               onClick={() => setShowInviteModal(true)}
             >
-              + Invite
+              {"+ Invite"}
             </button>
           </div>
 
