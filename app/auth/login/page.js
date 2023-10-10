@@ -13,15 +13,15 @@ export default function Login() {
   const router = useRouter();
   const supabase = createClientComponentClient();
   const handleSignIn = async () => {
-    try {
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+    const res = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (res.error) {
+      console.log("error while logig: ", JSON.stringify(res.error));
+      setError(true);
+    } else {
       router.push("/dashboard");
-    } catch (error) {
-      console.log("error while logig: ", JSON.stringify(error));
-      setError("Something went wrong with login");
     }
   };
   return (
