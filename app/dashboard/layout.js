@@ -1,7 +1,9 @@
 "use client"
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { useAuthContext } from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
 import {
     Bars3Icon,
     CalendarIcon,
@@ -33,7 +35,13 @@ function classNames(...classes) {
 
 export default function DashboardLayout({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const { user } = useAuthContext()
+    const router = useRouter()
 
+    useEffect(() => {
+        if (user == null) router.push("/auth/login")
+    }, [user])
+ 
     return (
         <>
             <div>

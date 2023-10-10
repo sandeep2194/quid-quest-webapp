@@ -3,11 +3,14 @@ import StandardInputWIthLabel from "@/app/lib/Input/StandardInputWIthLabel";
 import { useState } from "react";
 import Link from "next/link";
 import signIn from "@/app/firebase/auth/signin";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+
+  const router = useRouter()
 
   async function handleForm(event) {
     event.preventDefault();
@@ -20,6 +23,7 @@ export default function Login() {
     }
 
     // else successful
+    router.push('/dashboard')
     console.log(result);
   }
 

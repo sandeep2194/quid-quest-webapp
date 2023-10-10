@@ -1,7 +1,7 @@
 "use client"
 import StandardInputWIthLabel from "@/app/lib/Input/StandardInputWIthLabel";
 import StandardButtonGreen from "@/app/lib/Buttons/StandardButtonGreen";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 export default function ResetPassword() {
