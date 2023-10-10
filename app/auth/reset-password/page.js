@@ -1,8 +1,8 @@
 "use client";
 import StandardInputWIthLabel from "@/app/lib/Input/StandardInputWIthLabel";
 import StandardButtonGreen from "@/app/lib/Buttons/StandardButtonGreen";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -10,8 +10,8 @@ export default function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  //   const searchParams = useSearchParams();
   const supabase = createClientComponentClient();
+  const router = useRouter();
   const [success, setSuccess] = useState(false);
 
   const handleReset = async (e) => {
@@ -29,6 +29,9 @@ export default function ResetPassword() {
       setError(true);
     } else {
       setSuccess(true);
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 3000);
     }
   };
 
@@ -46,8 +49,8 @@ export default function ResetPassword() {
         <></>
       )}
       {success ? (
-        <p className="mt-1 font-semibold leading-6 text-center text-lg text-red-500">
-          password updated
+        <p className="mt-1 font-semibold leading-6 text-center text-lg text-green-500">
+          password updated... redirecting to login page in 3 seconds
         </p>
       ) : (
         <></>
