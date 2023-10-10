@@ -1,14 +1,6 @@
-"use client";
 import StandardButtonGreen from "@/app/lib/Buttons/StandardButtonGreen";
-// import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 export default function Welcome() {
-  useEffect(() => {
-    // const router = useRouter();
-    // const id = router.query.id;
-    // console.log(id);
-  }, []);
   return (
     <div>
       <h2 className="text-center text-2xl font-bold text-gray-800 mb-4">
