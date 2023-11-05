@@ -1,4 +1,4 @@
-import StandardButtonGreen from "./lib/Buttons/StandardButtonGreen";
+import Link from "next/link"
 
 export default function Home() {
   return (
