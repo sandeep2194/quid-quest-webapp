@@ -1,13 +1,55 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import DropdownBoxFunction from "@/app/lib/Dropdown/DropdownWithScroll";
 import EmployeeTable from "@/app/lib/Tables/EmployeeTable";
 import Link from "next/link";
 import InviteByEmail from "./inviteByEmail";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
+
 
 export default function Employees() {
+  const supabase = createClientComponentClient();
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [search, setSearch] = useState(null);
+
+  const [employees, setEmployees] = useState([]);
+
+  const fetchEmployees = async () => {
+    let { data, error } = await supabase
+      .from('employeeData') // Replace with your Supabase table name
+      .select('*');
+
+    if (error) {
+      console.log('error', error);
+    } else {
+      setEmployees(data);
+    }
+  };
+
+  async function handleSearch(searchTerm) {
+    let { data, error } = await supabase.from("employeeData").select('*').filter("firstname", "like", searchTerm);
+    if (error) {
+      console.log('error', error);
+    } else {
+      setEmployees(data);
+    }
+  }
+
+  useEffect(() => {
+    if (search) {
+      const timeoutId = setTimeout(() => {
+        handleSearch(search);
+      }, 500);
+
+      // Clear the timeout if the search term changes
+      // or if the component is unmounted
+      return () => clearTimeout(timeoutId);
+    } else {
+      fetchEmployees();
+    }
+  }, [search]);
 
   return (
     <>
@@ -34,9 +76,10 @@ export default function Employees() {
                   id="name"
                   className="block w-full rounded-md border-1 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
                   placeholder="search by name"
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              <DropdownBoxFunction></DropdownBoxFunction>
+              {/* <DropdownBoxFunction></DropdownBoxFunction> */}
             </div>
             <button
               className="hidden bg-[#2BB529] rounded-md text-white md:block font-semibold text-xl h-min px-4 py-2"
@@ -47,14 +90,14 @@ export default function Employees() {
           </div>
 
           {/** table to show list of employees */}
-          <EmployeeTable></EmployeeTable>
+          <EmployeeTable people={employees}></EmployeeTable>
         </div>
       </div>
-      <Link href="/invite-employee">
-        <button className="absolute bottom-0 left-0 bg-[#2BB529] text-white text-xl font-medium w-full p-4 text-center mt-4 md:hidden">
-          + INVITE NEW EMPLOYEE
-        </button>
-      </Link>
+      <button className="absolute bottom-0 left-0 bg-[#2BB529] text-white text-xl font-medium w-full p-4 text-center mt-4 md:hidden"
+        onClick={() => setShowInviteModal(true)}
+      >
+        + INVITE NEW EMPLOYEE
+      </button>
       <InviteByEmail
         showModal={showInviteModal}
         setShowModal={setShowInviteModal}

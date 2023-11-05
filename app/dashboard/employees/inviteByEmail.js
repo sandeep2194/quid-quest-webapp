@@ -110,9 +110,14 @@ export default function InviteByEmail({ showModal, setShowModal }) {
         </div>
       ) : (
         <div className="flex flex-col justify-centers space-y-6 px-6 py-10 rounded-xl shadow-xl w-full h-full">
-          <h1 className="text-center text-2xl font-bold text-gray-800 mb-4">
-            Invite Employee
-          </h1>
+          <div className="flex flex-row">
+            <h1 className="text-center text-2xl font-bold text-gray-800 mb-4 w-full">
+              Invite Employee
+            </h1>
+            <span className="inline-block px-4 pt-2 hover:cursor-pointer"
+              onClick={() => setShowModal(false)}
+            >X</span>
+          </div>
           {apiError ? (
             <EmptyFieldError
               errorMessage={"Something went wrong with backend"}
