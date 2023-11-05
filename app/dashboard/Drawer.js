@@ -219,6 +219,7 @@ export default function Drawer() {
             className="h-8 w-8 rounded-full bg-gray-800"
             src="https://picsum.photos/200"
             alt=""
+            
           />
         </a>
       </div>
