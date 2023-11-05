@@ -1,16 +1,17 @@
-const people = [
-    {
-        name: 'jaspreet kaur',
-        title: 'Quality agent',
-        department: 'Quality control',
-        email: 'jaspreet.kaur@gmail.com',
-        role: 'Member',
-        image:
-            'https://picsum.photos/200',
-    },
-]
-
-export default function EmployeeTable() {
+/*
+format of the incoming employee object 
+accountnumber: 9879797
+created_at: "2023-11-05T14:29:24.578036+00:00"
+firstname: "sandeep"
+id: 1
+institutenumber: 7878
+lastname: "singh"
+picture: null
+status: "active"
+transitnumber: 7878
+user: "1eb395a0-251e-47d9-8374-351fd3964aff"
+*/
+export default function EmployeeTable({ people }) {
     return (
         <div className="px-4 sm:px-6 lg:px-2">
 
@@ -24,13 +25,7 @@ export default function EmployeeTable() {
                                         Name
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        Title
-                                    </th>
-                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                         Status
-                                    </th>
-                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        Role
                                     </th>
                                     <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                                         <span className="sr-only">Edit</span>
@@ -38,15 +33,15 @@ export default function EmployeeTable() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200 bg-white">
-                                {people.map((person) => (
-                                    <tr key={person.email}>
+                                {people && people.map((person) => (
+                                    <tr key={person.firstname}>
                                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                                             <div className="flex items-center">
                                                 <div className="h-11 w-11 flex-shrink-0">
-                                                    <img className="h-11 w-11 rounded-full" src={person.image} alt="" />
+                                                    <img className="h-11 w-11 rounded-full" src={person.picture} alt="" />
                                                 </div>
                                                 <div className="ml-4">
-                                                    <div className="font-medium text-gray-900">{person.name}</div>
+                                                    <div className="font-medium text-gray-900">{person.firstname}</div>
                                                     <div className="mt-1 text-gray-500">{person.email}</div>
                                                 </div>
                                             </div>
