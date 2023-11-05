@@ -17,7 +17,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex items-center gap-x-5 md:gap-x-8">
-              <button className="rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-600 text-white hover:text-slate-100 hover:bg-green-500 active:bg-green-800 active:text-green-100 focus-visible:outline-green-600" >Login</button>
+              <Link href="/auth/login" className="rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-600 text-white hover:text-slate-100 hover:bg-green-500 active:bg-green-800 active:text-green-100 focus-visible:outline-green-600" >Login</Link>
             </div>
           </nav>
         </div>
