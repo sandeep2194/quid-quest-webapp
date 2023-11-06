@@ -33,7 +33,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-6 pb-16 pt-20 text-center md:text-left lg:pt-32">
           <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium drop-shadow-2xl tracking-tight text-slate-900 sm:text-7xl"><p className="text-green-700">Empowers</p> your business <p>expenses</p></h1>
 
-          <p class="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">Experience streamlined expense management with a professional, user-friendly interface designed for simplicity and efficient financial tracking.</p>
+          <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">Experience streamlined expense management with a professional, user-friendly interface designed for simplicity and efficient financial tracking.</p>
         </div>
 
       </div>
@@ -44,7 +44,7 @@ export default function Home() {
 
           {/* heading line */}
           <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
-            <h2 class="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl ">Explore Advanced Features Tailored for Efficient Expense Management</h2>
+            <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl ">Explore Advanced Features Tailored for Efficient Expense Management</h2>
           </div>
 
           {/* features div*/}
@@ -56,7 +56,7 @@ export default function Home() {
                 {/* setting up each feature */}
                 <div className="group relative rounded-full px-4 py-1 lg:px-6 lg:py-2 bg-white ">
                   <h3>
-                    <button className="font-display text-lg lg:text-xl ui-not-focus-visible:outline-none text-green-900 " id="headlessui-tabs-tab-:R2baalla" type="button" aria-selected="true" tabIndex="0" data-headlessui-state="selected" aria-controls="headlessui-tabs-panel-:Rdaalla:">Secure authentication</button>
+                    <Link href={"/auth/login"} className="font-display text-lg lg:text-xl ui-not-focus-visible:outline-none text-green-900 " id="headlessui-tabs-tab-:R2baalla" type="button" aria-selected="true" tabIndex="0" data-headlessui-state="selected" aria-controls="headlessui-tabs-panel-:Rdaalla:">Secure authentication</Link>
                   </h3>
 
 
