@@ -4,6 +4,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function DashboardContent() {
     const [activeTab, setActiveTab] = useState('category'); // Default to 'category', can also be 'department'
+    const [filter, setFilter] = useState('this month')
     const [expenseData, setExpenseData] = useState(null);
     const supabase = createClientComponentClient(); // Make sure you initialize this properly
 
@@ -11,7 +12,7 @@ export default function DashboardContent() {
         const fetchExpensesData = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             if (user && user.id) {
-                const { data, error } = await supabase.rpc('dashboard_expenses', { user_id: user.id, time_period: "this month" });
+                const { data, error } = await supabase.rpc('dashboard_expenses', { user_id: user.id, time_period: filter });
                 if (!error && data) {
                     console.log(data)
                     setExpenseData(data);
@@ -19,8 +20,12 @@ export default function DashboardContent() {
             }
         };
         fetchExpensesData();
-    }, []);
-
+    }, [filter]);
+    const buttonClass = (f) => {
+        return f === filter
+            ? "bg-green-500 text-white px-5 py-2 rounded"
+            : "border border-green-500 text-green-500 px-5 py-2 rounded";
+    };
     if (!expenseData) {
         return <p>Loading...</p>;
     }
@@ -28,15 +33,24 @@ export default function DashboardContent() {
         <div className="container mx-auto p-10">
             {/* Time Filter */}
             <div className="flex mb-5 space-x-4">
-                <button className="bg-green-500 text-white px-5 py-2 rounded">Weekly</button>
-                <button className="border border-green-500 text-green-500 px-5 py-2 rounded">Monthly</button>
-                <button className="border border-green-500 text-green-500 px-5 py-2 rounded">Last Month</button>
+                <button
+                    className={buttonClass("this week")}
+                    onClick={() => setFilter("this week")}
+                >Weekly</button>
+                <button
+                    className={buttonClass("this month")}
+                    onClick={() => setFilter("this month")}
+                >Monthly</button>
+                <button
+                    className={buttonClass("last month")}
+                    onClick={() => setFilter("last month")}
+                >Last Month</button>
             </div>
 
             {/* Total Expense */}
             <div className="bg-green-500 text-white p-10 mb-5 rounded">
                 <h2 className="text-3xl">Total Expense</h2>
-                <p className="text-4xl">${expenseData.grand_total}</p>
+                <p className="text-4xl">${expenseData.grand_total ? expenseData.grand_total : 0}</p>
             </div>
 
             {/* Department and Employee Count */}
