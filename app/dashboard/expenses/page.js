@@ -17,7 +17,9 @@ export default function expenseList() {
     const [selectedCat, setSelectedCat] = useState(null);
     const [selectedDep, setSelectedDep] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState(null);
+
     const supabase = createClientComponentClient()
+    const router = useRouter();
 
     async function getExpenses() {
         const { data, error } = await supabase.rpc('get_expenses_formatted')
@@ -63,6 +65,7 @@ export default function expenseList() {
                 <button
                     type="button"
                     className="block rounded-md bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                    onClick={() => router.push('/dashboard/expenses/add')}
                 >
                     Add Expense
                 </button>
