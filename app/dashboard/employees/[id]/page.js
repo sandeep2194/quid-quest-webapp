@@ -53,14 +53,15 @@ export default function () {
     const updateEmployee = async (fname, lname, acc, trans, inst) => {
         const { data, error } = await supabase
             .from('employeedata')
-            .update({ 
+            .update({
                 firstname: fname,
-                lastname:lname,
+                lastname: lname,
                 accountnumber: acc,
-                transitnumber:trans,
-                institutenumber:inst
+                transitnumber: trans,
+                institutenumber: inst
             })
             .eq('id', id);
+        router.push('/dashboard/employees')
         if (error) {
             console.error('Error updating employee data: ', error.message);
         }
@@ -222,7 +223,7 @@ export default function () {
                 <button
                     type="submit"
                     className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={()=>updateEmployee(fn,ln,accNum,transNum,insNum)}
+                    onClick={() => updateEmployee(fn, ln, accNum, transNum, insNum)}
                 >
                     Save
                 </button>
