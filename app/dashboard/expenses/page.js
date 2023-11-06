@@ -18,7 +18,7 @@ export default function expenseList() {
     ]
 
     async function getExpenses() {
-        const { data, error } = await supabase.from('expenses').select('*');
+        const { data, error } = await supabase.rpc('get_expenses_formatted')
 
         if (error) {
             console.log("error getting expenses", error)
@@ -26,17 +26,12 @@ export default function expenseList() {
             setExpenses(data)
         }
     }
+    getExpenses()
     return (
         <>
-
-
-
             <div className="flex flex-row justify-between  items-center mb-6">
 
                 <h1 className="text-2xl font-bold text-green-900 ">Expense List</h1>
-
-
-
                 <button
                     type="button"
                     className="block rounded-md bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
@@ -277,14 +272,14 @@ export default function expenseList() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-200 bg-white">
-                                        {expense.map((expense) => (
+                                        {expenses.map((expense) => (
                                             <tr key={expense.id}>
                                                 <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                                     {expense.id}
                                                 </td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{expense.department}</td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{expense.category}</td>
-                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{expense.price}</td>
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{expense.amount}</td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{expense.status}</td>
 
                                                 <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -300,13 +295,7 @@ export default function expenseList() {
                         </div>
                     </div>
                 </div>
-
-
-
-
             </div>
-
-
         </>
     )
 }

@@ -17,17 +17,53 @@ export default function Login() {
       setError("Please enter email and password");
       return;
     }
+
     const res = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
     if (res.error) {
-      console.log("error while logig: ", JSON.stringify(res.error));
-      setError("Your crendtials do not match");
-    } else {
+      console.log("Error while logging in: ", JSON.stringify(res.error));
+      setError("Your credentials do not match");
+      return;
+    }
+
+    // Assuming user is successfully logged in
+    // Now we will use an RPC call to get the user related data
+    // Here I'm assuming that you have an RPC endpoint set up at '/get_user_data'
+    // And that Supabase has been configured to include the user token in its API calls
+    try {
+      const user = res.data.user;
+      const { data, error } = await supabase.rpc('get_user_data', { user_id: user.id });
+
+      if (error) {
+        console.error("Error fetching user data: ", JSON.stringify(error));
+        setError("Failed to retrieve user details");
+        return;
+      }
+
+      // Assuming the RPC call returns the necessary data correctly
+      // Store the retrieved data in local storage
+      const userData = data[0]; // We expect the data array to have one object containing all the user data
+
+      localStorage.setItem('companyDetails', JSON.stringify({ id: userData.company_id, name: userData.company_name }));
+      localStorage.setItem('employeeDetails', JSON.stringify({ id: userData.employee_id, firstname: userData.employee_firstname, lastname: userData.employee_lastname }));
+      localStorage.setItem('departmentDetails', JSON.stringify({ id: userData.department_id, name: userData.department_name }));
+      localStorage.setItem('managerDetails', JSON.stringify({ id: userData.manager_id }));
+      localStorage.setItem('categories', JSON.stringify(userData.categories));
+      localStorage.setItem('departments', JSON.stringify(userData.departments));
+
+      // Redirect to the dashboard after successful login and data retrieval
       router.push("/dashboard");
+
+    } catch (e) {
+      // Handle any exceptions during the RPC call
+      console.error("Unexpected error: ", e);
+      setError("An unexpected error occurred");
     }
   };
+
   return (
     <div className="flex flex-col justify-centers space-y-6">
       <h1 className="text-center text-2xl font-bold text-gray-800 mb-4">
