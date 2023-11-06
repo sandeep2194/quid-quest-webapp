@@ -1,20 +1,108 @@
 'use client'
-import { UserCircleIcon } from '@heroicons/react/24/solid'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { FolderIcon } from '@heroicons/react/24/solid'
-import { PhotoIcon } from '@heroicons/react/24/solid'
+import { PhotoIcon, CheckCircleIcon } from '@heroicons/react/24/solid'
 
 export default function addExpense() {
+    const supabase = createClientComponentClient();
+    const { id } = useParams();
+    const router = useRouter();
+
+    const [cats, setCats] = useState([])
+    const [cat, setCat] = useState(null)
+    const [am, setAm] = useState("")
+    const [att, setAtt] = useState(null)
+    const [file, setFile] = useState(null); // State for the file to be uploaded
+    const [desc, setDesc] = useState("");
+    const [uploading, setUploading] = useState(false); // State to show uploading progress
+
+
+
+
+    const status = 'pending';
+
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+    };
+    const uploadFile = async () => {
+        if (!file) return;
+
+        setUploading(true);
+        try {
+            // You can add metadata or custom file paths as needed
+            const filePath = `/${file.name}`;
+            let { error } = await supabase.storage.from('attachment').upload(filePath, file);
+
+            if (error) throw error;
+
+            const url = await supabase.storage.from('attachment').getPublicUrl(filePath)
+            setAtt(url.data.publicUrl)
+            // Here you might want to save the file path or URL to your database
+            alert('File uploaded successfully!');
+        } catch (error) {
+            alert('Error uploading file: ', error.message);
+        } finally {
+            setUploading(false);
+        }
+    };
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
     }
-    return (
+    async function getCatDeps() {
+        const depDetails = JSON.parse(localStorage.getItem("departmentDetails"))
+        const departmentIdOfUser = depDetails.id;
 
+        const comDetails = JSON.parse(localStorage.getItem("companyDetails"))
+        const companyId = comDetails.id;
+
+        const empDetails = JSON.parse(localStorage.getItem("employeeDetails"))
+        const employeeId = empDetails.id
+
+        const req = await supabase.auth.getUser();
+        const userId = req.data.user.id;
+
+        return {
+            departmentIdOfUser,
+            companyId,
+            employeeId,
+            userId
+        }
+    }
+
+
+    async function createExpense() {
+        const { departmentIdOfUser, companyId, employeeId, userId } = await getCatDeps();
+        const { error } = await supabase.from('expenses').insert({
+            amount: am,
+            category: cat,
+            company: companyId,
+            employee: employeeId,
+            user: userId,
+            department: departmentIdOfUser,
+            status: status,
+            attachment: att,
+            description: desc
+        })
+        if (error) {
+            console.log("error create expense, ", error)
+        } else {
+            router.push('/dashboard/expenses');
+        }
+    }
+
+    useEffect(() => {
+        setCats(JSON.parse(localStorage.getItem("categories")));
+    }, [])
+
+    useEffect(() => {
+        uploadFile();
+    }, [file])
+
+    return (
         <form>
             <div className="space-y-12 md:m-10">
                 <div>
@@ -31,7 +119,7 @@ export default function addExpense() {
                                 <Menu as="div" className="relative inline-block text-left">
                                     <div>
                                         <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                                            Filter by Category
+                                            {cat ? cats.find(c => c.id == cat).name : "Selected Category"}
                                             <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
                                         </Menu.Button>
                                     </div>
@@ -47,45 +135,24 @@ export default function addExpense() {
                                     >
                                         <Menu.Items className="relative right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                             <div className="py-1">
-                                                <Menu.Item>
-                                                    {({ active }) => (
-                                                        <a
-                                                            href="#"
-                                                            className={classNames(
-                                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                                'block px-4 py-2 text-sm'
+                                                {
+                                                    cats && cats.map((c) => (
+                                                        <Menu.Item key={c.id} >
+                                                            {({ active }) => (
+                                                                <a
+                                                                    href="#"
+                                                                    className={classNames(
+                                                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                                        'block px-4 py-2 text-sm'
+                                                                    )}
+                                                                    onClick={() => setCat(c.id)}
+                                                                >
+                                                                    {c.name}
+                                                                </a>
                                                             )}
-                                                        >
-                                                            Food
-                                                        </a>
-                                                    )}
-                                                </Menu.Item>
-                                                <Menu.Item>
-                                                    {({ active }) => (
-                                                        <a
-                                                            href="#"
-                                                            className={classNames(
-                                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                                'block px-4 py-2 text-sm'
-                                                            )}
-                                                        >
-                                                            Accomodation
-                                                        </a>
-                                                    )}
-                                                </Menu.Item>
-                                                <Menu.Item>
-                                                    {({ active }) => (
-                                                        <a
-                                                            href="#"
-                                                            className={classNames(
-                                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                                'block px-4 py-2 text-sm'
-                                                            )}
-                                                        >
-                                                            Travel
-                                                        </a>
-                                                    )}
-                                                </Menu.Item>
+                                                        </Menu.Item>
+                                                    ))
+                                                }
 
                                             </div>
                                         </Menu.Items>
@@ -108,8 +175,10 @@ export default function addExpense() {
                                         type="text"
                                         name="username"
                                         id="username"
-                                        className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                        className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 outline-none"
                                         placeholder="Enter expense here"
+                                        value={am}
+                                        onChange={(e) => setAm(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -122,18 +191,26 @@ export default function addExpense() {
                             </label>
                             <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 bg-white">
                                 <div className="text-center">
-                                    <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+                                    {att ?
+                                        <CheckCircleIcon className="mx-auto h-12 w-12 text-green-800" aria-hidden="true" />
+                                        : <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />}
                                     <div className="mt-4 flex text-sm leading-6 text-gray-600">
                                         <label
                                             htmlFor="file-upload"
                                             className="relative cursor-pointer rounded-md bg-white font-semibold text-green-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-green-600 focus-within:ring-offset-2 hover:text-green-500"
                                         >
                                             <span>Upload a file</span>
-                                            <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                                            <input
+                                                id="file-upload"
+                                                name="file-upload"
+                                                type="file"
+                                                className="sr-only"
+                                                onChange={handleFileChange}
+                                            />
                                         </label>
                                         <p className="pl-1">or drag and drop</p>
                                     </div>
-                                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, PDF, DOC, DOCX up to 10MB</p>
                                 </div>
                             </div>
                         </div>
@@ -149,7 +226,9 @@ export default function addExpense() {
                                     name="about"
                                     rows={5}
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    defaultValue={''}
+                                    value={desc}
+                                    onChange={(e) => setDesc(e.target.value)}
+
                                 />
                             </div>
 
@@ -157,12 +236,15 @@ export default function addExpense() {
 
                         {/* save or cancel  */}
                         <div className="mt-6 flex items-center justify-end gap-x-6">
-                            <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                            <button type="button" className="text-sm font-semibold leading-6 text-gray-900"
+                                onClick={() => router.back()}
+                            >
                                 Cancel
                             </button>
                             <button
-                                type="submit"
+                                type="button"
                                 className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                                onClick={() => createExpense()}
                             >
                                 Save
                             </button>
