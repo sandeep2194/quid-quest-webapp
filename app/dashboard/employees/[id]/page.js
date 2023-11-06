@@ -50,6 +50,21 @@ export default function () {
             console.error('Error updating employee picture: ', error.message);
         }
     };
+    const updateEmployee = async (fname, lname, acc, trans, inst) => {
+        const { data, error } = await supabase
+            .from('employeedata')
+            .update({ 
+                firstname: fname,
+                lastname:lname,
+                accountnumber: acc,
+                transitnumber:trans,
+                institutenumber:inst
+            })
+            .eq('id', id);
+        if (error) {
+            console.error('Error updating employee data: ', error.message);
+        }
+    };
     const getEmployee = async () => {
         const { data, error } = await supabase.from('employeedata').select('*').filter('id', 'eq', id)
         if (error) {
@@ -207,6 +222,7 @@ export default function () {
                 <button
                     type="submit"
                     className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    onClick={()=>updateEmployee(fn,ln,accNum,transNum,insNum)}
                 >
                     Save
                 </button>
