@@ -57,7 +57,7 @@ export default function EmployeeTable({ people }) {
                                         </td>
                                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">{person.role}</td>
                                         <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                                            <a href={`/dashboard/employees/${person.id}`} className="text-indigo-600 hover:text-indigo-900">
                                                 Edit<span className="sr-only">, {person.name}</span>
                                             </a>
                                         </td>

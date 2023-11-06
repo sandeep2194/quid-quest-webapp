@@ -1,9 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import DropdownBoxFunction from "@/app/lib/Dropdown/DropdownWithScroll";
 import EmployeeTable from "@/app/lib/Tables/EmployeeTable";
-import Link from "next/link";
 import InviteByEmail from "./inviteByEmail";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
