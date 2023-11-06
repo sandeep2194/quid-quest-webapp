@@ -5,8 +5,6 @@ import EmployeeTable from "@/app/lib/Tables/EmployeeTable";
 import InviteByEmail from "./inviteByEmail";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-
-
 export default function Employees() {
   const supabase = createClientComponentClient();
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -27,7 +25,11 @@ export default function Employees() {
   };
 
   async function handleSearch(searchTerm) {
-    let { data, error } = await supabase.from("employeedata").select('*').filter("firstname", "like", searchTerm);
+    let { data, error } = await supabase
+      .from("employeedata")
+      .select('*')
+      .filter("firstname", "ilike", `%${searchTerm}%`);
+
     if (error) {
       console.log('error', error);
     } else {
