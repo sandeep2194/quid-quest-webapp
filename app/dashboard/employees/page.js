@@ -16,7 +16,7 @@ export default function Employees() {
 
   const fetchEmployees = async () => {
     let { data, error } = await supabase
-      .from('employeeData') // Replace with your Supabase table name
+      .from('employeedata') // Replace with your Supabase table name
       .select('*');
 
     if (error) {
@@ -27,7 +27,7 @@ export default function Employees() {
   };
 
   async function handleSearch(searchTerm) {
-    let { data, error } = await supabase.from("employeeData").select('*').filter("firstname", "like", searchTerm);
+    let { data, error } = await supabase.from("employeedata").select('*').filter("firstname", "like", searchTerm);
     if (error) {
       console.log('error', error);
     } else {
