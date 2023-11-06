@@ -52,20 +52,45 @@ export default function Home() {
 
             {/* feature row */}
             <div className="mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-5">
-              <div className="relative z-10 flex gap-x-4 whitespace-normal px-4 sm:mx-auto sm:px-0" role="tablist" aria-orientation="horizontal">
+              <div className="relative z-10 flex gap-x-4 whitespace-normal px-4 sm:mx-auto sm:px-0 " role="tablist" aria-orientation="horizontal">
                 {/* setting up each feature */}
                 <div className="group relative rounded-full px-4 py-1 lg:px-6 lg:py-2 bg-white ">
                   <h3>
-                    <Link href={"/auth/login"} className="font-display text-lg lg:text-xl ui-not-focus-visible:outline-none text-green-900 " id="headlessui-tabs-tab-:R2baalla" type="button" aria-selected="true" tabIndex="0" data-headlessui-state="selected" aria-controls="headlessui-tabs-panel-:Rdaalla:">Secure authentication</Link>
+                    <Link href={"#"} className="font-display text-lg lg:text-xl ui-not-focus-visible:outline-none text-green-900 " id="headlessui-tabs-tab-:R2baalla" type="button" aria-selected="true" tabIndex="0" data-headlessui-state="selected" aria-controls="headlessui-tabs-panel-:Rdaalla:">Secure authentication</Link>
                   </h3>
 
 
                 </div>
+                <div className="group relative rounded-full px-4 py-1 lg:px-6 lg:py-2 bg-white ">
+                  <h3>
+                    <Link href={"#"} className="font-display text-lg lg:text-xl ui-not-focus-visible:outline-none text-green-900 " id="headlessui-tabs-tab-:R2baalla" type="button" aria-selected="true" tabIndex="0" data-headlessui-state="selected" aria-controls="headlessui-tabs-panel-:Rdaalla:">Invitation and Role Management</Link>
+                  </h3>
+
+
+                </div>
+                <div className="group relative rounded-full px-4 py-1 lg:px-6 lg:py-2 bg-white ">
+                  <h3>
+                    <Link href={"#"} className="font-display text-lg lg:text-xl ui-not-focus-visible:outline-none text-green-900 " id="headlessui-tabs-tab-:R2baalla" type="button" aria-selected="true" tabIndex="0" data-headlessui-state="selected" aria-controls="headlessui-tabs-panel-:Rdaalla:">Categorized Expenses</Link>
+                  </h3>
+
+
+                </div><div className="group relative rounded-full px-4 py-1 lg:px-6 lg:py-2 bg-white ">
+                  <h3>
+                    <Link href={"#"} className="font-display text-lg lg:text-xl ui-not-focus-visible:outline-none text-green-900 " id="headlessui-tabs-tab-:R2baalla" type="button" aria-selected="true" tabIndex="0" data-headlessui-state="selected" aria-controls="headlessui-tabs-panel-:Rdaalla:">Managerial Oversight</Link>
+                  </h3>
+
+
+                </div>
+
               </div>
 
             </div>
           </div>
-
+          {/* screenshot */}
+          <div className="pt-8 bg-white m-6 rounded-lg shadow-md">
+            <p className="m-auto px-4 text-lg pb-4">{"With robust login systems and JWT token authentication, users can be assured of secure access to their expense data."}</p>
+            <img src="/images/screenshot.png" className="rounded-b-lg  border-t-2 border-gray-400" />
+          </div>
         </div>
       </section>
 
