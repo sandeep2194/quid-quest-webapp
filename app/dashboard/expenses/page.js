@@ -1,6 +1,6 @@
 'use client'
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
@@ -9,13 +9,15 @@ import { useState } from "react"
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
-
+let statuses = ["pending", "approved", "disapproved"];
 export default function expenseList() {
     const [expenses, setExpenses] = useState([])
+    const [cats, setCats] = useState([])
+    const [deps, setDeps] = useState([])
+    const [selectedCat, setSelectedCat] = useState(null);
+    const [selectedDep, setSelectedDep] = useState(null);
+    const [selectedStatus, setSelectedStatus] = useState(null);
     const supabase = createClientComponentClient()
-    const expense = [
-        { id: 12345, department: 'Finance', category: 'food', price: "$ 400", status: 'Approved' },
-    ]
 
     async function getExpenses() {
         const { data, error } = await supabase.rpc('get_expenses_formatted')
@@ -26,7 +28,33 @@ export default function expenseList() {
             setExpenses(data)
         }
     }
-    getExpenses()
+
+    function getCatDeps() {
+        setCats(JSON.parse(localStorage.getItem("categories")));
+        setDeps(JSON.parse(localStorage.getItem("departments")));
+    }
+
+    const fetchFilteredExpenses = async (category_filter_id, department_filter_id, expense_status) => {
+        const { data, error } = await supabase
+            .rpc('get_filtered_expenses', { category_filter_id, department_filter_id, expense_status });
+
+        if (error) {
+            console.error('error fetching filtered expenses:', error);
+            return;
+        }
+
+        setExpenses(data);
+    };
+
+    useEffect(() => {
+        getExpenses()
+        getCatDeps()
+    }, [])
+
+    useEffect(() => {
+        fetchFilteredExpenses(selectedCat, selectedDep, selectedStatus);
+    }, [selectedCat, selectedDep, selectedStatus])
+
     return (
         <>
             <div className="flex flex-row justify-between  items-center mb-6">
@@ -38,19 +66,14 @@ export default function expenseList() {
                 >
                     Add Expense
                 </button>
-
-
             </div>
-
-
             {/* filter div */}
             <div className="flex flex-wrap w-fit gap-2 md:flex-row md:space-x-4 md:space-y-0" >
-
                 {/* filter by department */}
                 <Menu as="div" className="relative inline-block text-left">
                     <div>
                         <Menu.Button className="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                            ilter by category
+                            {selectedCat ? cats.find(c => c.id == selectedCat).name : "filter by category"}
                             <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
                         </Menu.Button>
                     </div>
@@ -66,45 +89,25 @@ export default function expenseList() {
                     >
                         <Menu.Items className="relative right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div className="py-1">
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <a
-                                            href="#"
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                'block px-4 py-2 text-sm'
+                                {
+                                    cats && cats.map(c =>
+                                        <Menu.Item key={c.id}>
+                                            {({ active }) => (
+                                                <a
+                                                    href="#"
+                                                    className={classNames(
+                                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                        'block px-4 py-2 text-sm'
+                                                    )}
+                                                    onClick={() => setSelectedCat(c.id)}
+                                                >
+                                                    {c.name}
+                                                </a>
                                             )}
-                                        >
-                                            Finance
-                                        </a>
-                                    )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <a
-                                            href="#"
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                'block px-4 py-2 text-sm'
-                                            )}
-                                        >
-                                            Marketing
-                                        </a>
-                                    )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <a
-                                            href="#"
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                'block px-4 py-2 text-sm'
-                                            )}
-                                        >
-                                            Techincal
-                                        </a>
-                                    )}
-                                </Menu.Item>
+                                        </Menu.Item>
+                                    )
+                                }
+
 
                             </div>
                         </Menu.Items>
@@ -116,7 +119,7 @@ export default function expenseList() {
                 <Menu as="div" className="relative inline-block text-left">
                     <div>
                         <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                            Filter by department
+                            {selectedDep ? deps.find(d => d.id == selectedDep).name : "filter by department"}
                             <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
                         </Menu.Button>
                     </div>
@@ -132,46 +135,25 @@ export default function expenseList() {
                     >
                         <Menu.Items className="relative right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div className="py-1">
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <a
-                                            href="#"
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                'block px-4 py-2 text-sm'
-                                            )}
-                                        >
-                                            Finance
-                                        </a>
-                                    )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <a
-                                            href="#"
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                'block px-4 py-2 text-sm'
-                                            )}
-                                        >
-                                            Marketing
-                                        </a>
-                                    )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <a
-                                            href="#"
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                'block px-4 py-2 text-sm'
-                                            )}
-                                        >
-                                            Techincal
-                                        </a>
-                                    )}
-                                </Menu.Item>
 
+                                {
+                                    deps && deps.map((d) =>
+                                        <Menu.Item key={d.id}>
+                                            {({ active }) => (
+                                                <a
+                                                    href="#"
+                                                    onClick={() => setSelectedDep(d.id)}
+                                                    className={classNames(
+                                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                        'block px-4 py-2 text-sm'
+                                                    )}
+                                                >
+                                                    {d.name}
+                                                </a>
+                                            )}
+                                        </Menu.Item>
+                                    )
+                                }
                             </div>
                         </Menu.Items>
                     </Transition>
@@ -180,7 +162,7 @@ export default function expenseList() {
                 <Menu as="div" className="relative inline-block text-left">
                     <div>
                         <Menu.Button className="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                            Filter by status
+                            {selectedStatus ? selectedStatus : "filter by status"}
                             <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
                         </Menu.Button>
                     </div>
@@ -196,46 +178,22 @@ export default function expenseList() {
                     >
                         <Menu.Items className="relative right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div className="py-1">
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <a
-                                            href="#"
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                'block px-4 py-2 text-sm'
-                                            )}
-                                        >
-                                            Approved
-                                        </a>
-                                    )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <a
-                                            href="#"
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                'block px-4 py-2 text-sm'
-                                            )}
-                                        >
-                                            Disapproved
-                                        </a>
-                                    )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <a
-                                            href="#"
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                'block px-4 py-2 text-sm'
-                                            )}
-                                        >
-                                            Pending
-                                        </a>
-                                    )}
-                                </Menu.Item>
-
+                                {statuses && statuses.map((s) =>
+                                    <Menu.Item key={s}>
+                                        {({ active }) => (
+                                            <a
+                                                href="#"
+                                                className={classNames(
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                    'block px-4 py-2 text-sm'
+                                                )}
+                                                onClick={() => setSelectedStatus(s)}
+                                            >
+                                                {s}
+                                            </a>
+                                        )}
+                                    </Menu.Item>
+                                )}
                             </div>
                         </Menu.Items>
                     </Transition>
@@ -283,7 +241,7 @@ export default function expenseList() {
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{expense.status}</td>
 
                                                 <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                    <a href="#" className="text-red-600 hover:text-red-900">
+                                                    <a href={"/dashboard/expenses/" + expense.id} className="text-red-600 hover:text-red-900">
                                                         Edit<span className="sr-only">, {expense.id}</span>
                                                     </a>
                                                 </td>
