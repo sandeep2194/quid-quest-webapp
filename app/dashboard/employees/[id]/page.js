@@ -32,7 +32,7 @@ export default function () {
         if (error) {
             console.error('Error uploading the file: ', error.message);
         } else {
-            // Assuming your 'employeeData' table has a 'picture' column to store the image URL
+            // Assuming your 'employeedata' table has a 'picture' column to store the image URL
             const imageUrl = supabase.storage.from('avatars').getPublicUrl(`public/${file.name}`).data.publicUrl;
             // Update the state and possibly the database record for the employee
             setPic(imageUrl);
@@ -42,7 +42,7 @@ export default function () {
     };
     const updateEmployeePicture = async (imageUrl) => {
         const { data, error } = await supabase
-            .from('employeeData')
+            .from('employeedata')
             .update({ picture: imageUrl })
             .eq('id', id);
 
@@ -51,7 +51,7 @@ export default function () {
         }
     };
     const getEmployee = async () => {
-        const { data, error } = await supabase.from('employeeData').select('*').filter('id', 'eq', id)
+        const { data, error } = await supabase.from('employeedata').select('*').filter('id', 'eq', id)
         if (error) {
             console.log('error getting employyeee:  ', error)
         } else {
